@@ -1,499 +1,292 @@
 // ==============================
-// Text Tools
+// Text Tools - Main Script
 // ==============================
 
+// ---------- DOM ----------
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const clearButton = document.getElementById("clearButton");
 const copyButton = document.getElementById("copyButton");
 
-const tabs = document.querySelectorAll(".tab");
-const tabContents = document.querySelectorAll(".tab-content");
+// ---------- 基本処理 ----------
+function getInput() {
+    return inputText.value;
+}
 
-
-// ==============================
-// タブ切り替え
-// ==============================
-
-tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-        const target = tab.dataset.tab;
-
-        tabs.forEach(item => {
-            item.classList.remove("active");
-        });
-
-        tabContents.forEach(content => {
-            content.classList.remove("active");
-        });
-
-        tab.classList.add("active");
-
-        const targetContent = document.getElementById(target);
-
-        if (targetContent) {
-            targetContent.classList.add("active");
-        }
-    });
-});
-
-
-// ==============================
-// 解析
-// ==============================
+function setOutput(text) {
+    outputText.value = text;
+    updateAnalysis();
+}
 
 function updateAnalysis() {
-    const text = inputText.value;
+    const text = getInput();
 
     document.getElementById("charCount").textContent =
         [...text].length;
 
     document.getElementById("lineCount").textContent =
-        text === "" ? 0 : text.split(/\r?\n/).length;
+        text === "" ? 0 : text.split("\n").length;
 
     document.getElementById("byteCount").textContent =
         new TextEncoder().encode(text).length;
 
-    const spaces = text.match(/\s/g);
-
     document.getElementById("spaceCount").textContent =
-        spaces ? spaces.length : 0;
+        (text.match(/\s/g) || []).length;
 }
 
-inputText.addEventListener("input", updateAnalysis);
+// ---------- 変換ツール ----------
 
-
-// ==============================
-// 結果を表示
-// ==============================
-
-function showResult(text) {
-    outputText.value = text;
-}
-
-
-// ==============================
 // ひらがな → カタカナ
-// ==============================
-
 function hiraganaToKatakana(text) {
     return text.replace(/[\u3041-\u3096]/g, char =>
         String.fromCharCode(char.charCodeAt(0) + 0x60)
     );
 }
 
-
-// ==============================
 // カタカナ → ひらがな
-// ==============================
-
 function katakanaToHiragana(text) {
     return text.replace(/[\u30A1-\u30F6]/g, char =>
         String.fromCharCode(char.charCodeAt(0) - 0x60)
     );
 }
 
-
-// ==============================
 // 大文字 → 小文字
-// ==============================
-
 function toLowerCase(text) {
     return text.toLowerCase();
 }
 
-
-// ==============================
 // 小文字 → 大文字
-// ==============================
-
 function toUpperCase(text) {
     return text.toUpperCase();
 }
 
-
-// ==============================
-// 全角英数字 → 半角
-// ==============================
-
-function fullWidthToHalfWidth(text) {
+// 全角 → 半角
+function fullToHalf(text) {
     return text.replace(/[！-～]/g, char =>
         String.fromCharCode(char.charCodeAt(0) - 0xFEE0)
-    ).replace(/　/g, " ");
+    );
 }
 
-
-// ==============================
-// 半角英数字 → 全角
-// ==============================
-
-function halfWidthToFullWidth(text) {
+// 半角 → 全角
+function halfToFull(text) {
     return text.replace(/[!-~]/g, char =>
         String.fromCharCode(char.charCodeAt(0) + 0xFEE0)
-    ).replace(/ /g, "　");
+    );
 }
 
-
-// ==============================
 // 文字列を逆順
-// ==============================
-
 function reverseText(text) {
     return [...text].reverse().join("");
 }
 
+// ---------- 加工ツール ----------
 
-// ==============================
-// ひらがな → ローマ字
-// 基本的な日本語に対応
-// ==============================
-
-function hiraganaToRomaji(text) {
-
-    const table = {
-        "きゃ": "kya",
-        "きゅ": "kyu",
-        "きょ": "kyo",
-        "しゃ": "sha",
-        "しゅ": "shu",
-        "しょ": "sho",
-        "ちゃ": "cha",
-        "ちゅ": "chu",
-        "ちょ": "cho",
-        "にゃ": "nya",
-        "にゅ": "nyu",
-        "にょ": "nyo",
-        "ひゃ": "hya",
-        "ひゅ": "hyu",
-        "ひょ": "hyo",
-        "みゃ": "mya",
-        "みゅ": "myu",
-        "みょ": "myo",
-        "りゃ": "rya",
-        "りゅ": "ryu",
-        "りょ": "ryo",
-
-        "ぎゃ": "gya",
-        "ぎゅ": "gyu",
-        "ぎょ": "gyo",
-        "じゃ": "ja",
-        "じゅ": "ju",
-        "じょ": "jo",
-        "びゃ": "bya",
-        "びゅ": "byu",
-        "びょ": "byo",
-        "ぴゃ": "pya",
-        "ぴゅ": "pyu",
-        "ぴょ": "pyo",
-
-        "あ": "a",
-        "い": "i",
-        "う": "u",
-        "え": "e",
-        "お": "o",
-
-        "か": "ka",
-        "き": "ki",
-        "く": "ku",
-        "け": "ke",
-        "こ": "ko",
-
-        "さ": "sa",
-        "し": "shi",
-        "す": "su",
-        "せ": "se",
-        "そ": "so",
-
-        "た": "ta",
-        "ち": "chi",
-        "つ": "tsu",
-        "て": "te",
-        "と": "to",
-
-        "な": "na",
-        "に": "ni",
-        "ぬ": "nu",
-        "ね": "ne",
-        "の": "no",
-
-        "は": "ha",
-        "ひ": "hi",
-        "ふ": "fu",
-        "へ": "he",
-        "ほ": "ho",
-
-        "ま": "ma",
-        "み": "mi",
-        "む": "mu",
-        "め": "me",
-        "も": "mo",
-
-        "や": "ya",
-        "ゆ": "yu",
-        "よ": "yo",
-
-        "ら": "ra",
-        "り": "ri",
-        "る": "ru",
-        "れ": "re",
-        "ろ": "ro",
-
-        "わ": "wa",
-        "を": "wo",
-        "ん": "n",
-
-        "が": "ga",
-        "ぎ": "gi",
-        "ぐ": "gu",
-        "げ": "ge",
-        "ご": "go",
-
-        "ざ": "za",
-        "じ": "ji",
-        "ず": "zu",
-        "ぜ": "ze",
-        "ぞ": "zo",
-
-        "だ": "da",
-        "ぢ": "ji",
-        "づ": "zu",
-        "で": "de",
-        "ど": "do",
-
-        "ば": "ba",
-        "び": "bi",
-        "ぶ": "bu",
-        "べ": "be",
-        "ぼ": "bo",
-
-        "ぱ": "pa",
-        "ぴ": "pi",
-        "ぷ": "pu",
-        "ぺ": "pe",
-        "ぽ": "po",
-
-        "ぁ": "xa",
-        "ぃ": "xi",
-        "ぅ": "xu",
-        "ぇ": "xe",
-        "ぉ": "xo",
-        "っ": "",
-        "ー": "-"
-    };
-
-    let result = "";
-    let i = 0;
-
-    while (i < text.length) {
-
-        const two = text.slice(i, i + 2);
-
-        if (table[two]) {
-            result += table[two];
-            i += 2;
-            continue;
-        }
-
-        const one = text[i];
-
-        // 「っ」の次の子音を重ねる
-        if (one === "っ") {
-            const nextTwo = text.slice(i + 1, i + 3);
-            const nextOne = table[nextTwo] || table[text[i + 1]] || "";
-
-            if (nextOne) {
-                result += nextOne[0];
-            }
-
-            i++;
-            continue;
-        }
-
-        result += table[one] ?? one;
-        i++;
-    }
-
-    return result;
+// 空白を削除
+function removeSpaces(text) {
+    return text.replace(/\s/g, "");
 }
 
-
-// ==============================
-// 加工：指定回数繰り返す
-// ==============================
-
-function repeatText() {
-
-    const text = inputText.value;
-
-    if (!text) {
-        showResult("");
-        return;
-    }
-
-    const count = prompt("何回繰り返しますか？", "2");
-
-    if (count === null) {
-        return;
-    }
-
-    const number = Number(count);
-
-    if (!Number.isInteger(number) || number < 1) {
-        alert("1以上の整数を入力してください。");
-        return;
-    }
-
-    showResult(text.repeat(number));
-}
-
-
-// ==============================
-// 加工：空白削除
-// ==============================
-
-function removeSpaces() {
-    showResult(inputText.value.replace(/\s/g, ""));
-}
-
-
-// ==============================
-// 加工：空行削除
-// ==============================
-
-function removeEmptyLines() {
-    const result = inputText.value
-        .split(/\r?\n/)
+// 空行を削除
+function removeEmptyLines(text) {
+    return text
+        .split("\n")
         .filter(line => line.trim() !== "")
         .join("\n");
-
-    showResult(result);
 }
 
-
-// ==============================
-// 加工：重複行削除
-// ==============================
-
-function removeDuplicateLines() {
-    const lines = inputText.value.split(/\r?\n/);
-    const unique = [...new Set(lines)];
-
-    showResult(unique.join("\n"));
+// 重複行を削除
+function removeDuplicateLines(text) {
+    return [...new Set(text.split("\n"))].join("\n");
 }
 
-
-// ==============================
-// 加工：行を逆順
-// ==============================
-
-function reverseLines() {
-    const lines = inputText.value.split(/\r?\n/);
-
-    showResult(lines.reverse().join("\n"));
+// 行を逆順
+function reverseLines(text) {
+    return text.split("\n").reverse().join("\n");
 }
 
-
-// ==============================
-// 加工：行をシャッフル
-// ==============================
-
-function shuffleLines() {
-
-    const lines = inputText.value.split(/\r?\n/);
+// 行をシャッフル
+function shuffleLines(text) {
+    const lines = text.split("\n");
 
     for (let i = lines.length - 1; i > 0; i--) {
-
         const j = Math.floor(Math.random() * (i + 1));
-
         [lines[i], lines[j]] = [lines[j], lines[i]];
     }
 
-    showResult(lines.join("\n"));
+    return lines.join("\n");
 }
 
+// ---------- エンコード ----------
 
-// ==============================
-// ボタンに機能を割り当て
-// ==============================
+// Base64 エンコード
+function base64Encode(text) {
+    const bytes = new TextEncoder().encode(text);
 
-document.querySelectorAll(".tool-button").forEach(button => {
+    let binary = "";
+    bytes.forEach(byte => {
+        binary += String.fromCharCode(byte);
+    });
+
+    return btoa(binary);
+}
+
+// Base64 デコード
+function base64Decode(text) {
+    try {
+        const binary = atob(text);
+        const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+
+        return new TextDecoder().decode(bytes);
+    } catch {
+        return "Base64として正しくありません。";
+    }
+}
+
+// URL エンコード
+function urlEncode(text) {
+    return encodeURIComponent(text);
+}
+
+// URL デコード
+function urlDecode(text) {
+    try {
+        return decodeURIComponent(text);
+    } catch {
+        return "URLエンコードされた文字列として正しくありません。";
+    }
+}
+
+// HTML エンコード
+function htmlEncode(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+// HTML デコード
+function htmlDecode(text) {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = text;
+    return textarea.value;
+}
+
+// ---------- 文字コード ----------
+
+// ASCII コード
+function asciiCode(text) {
+    return [...text]
+        .map(char => {
+            const code = char.charCodeAt(0);
+
+            if (code <= 127) {
+                return `${char} → ${code}`;
+            }
+
+            return `${char} → ASCII対象外`;
+        })
+        .join("\n");
+}
+
+// Unicode コードポイント
+function unicodeCodePoint(text) {
+    return [...text]
+        .map(char =>
+            `${char} → U+${char.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`
+        )
+        .join("\n");
+}
+
+// Unicode エスケープ
+function unicodeEscape(text) {
+    return [...text]
+        .map(char => {
+            const code = char.codePointAt(0);
+
+            if (code <= 0xFFFF) {
+                return "\\u" + code.toString(16).padStart(4, "0");
+            }
+
+            return "\\u{" + code.toString(16) + "}";
+        })
+        .join("");
+}
+
+// UTF-8 バイト列
+function utf8Bytes(text) {
+    return [...new TextEncoder().encode(text)]
+        .map(byte => byte.toString(16).toUpperCase().padStart(2, "0"))
+        .join(" ");
+}
+
+// ---------- ツール管理 ----------
+
+const tools = {
+
+    // 変換
+    "hiragana-katakana": hiraganaToKatakana,
+    "katakana-hiragana": katakanaToHiragana,
+    "lowercase": toLowerCase,
+    "uppercase": toUpperCase,
+    "full-half": fullToHalf,
+    "half-full": halfToFull,
+    "reverse": reverseText,
+
+    // 加工
+    "remove-spaces": removeSpaces,
+    "remove-empty-lines": removeEmptyLines,
+    "remove-duplicate-lines": removeDuplicateLines,
+    "reverse-lines": reverseLines,
+    "shuffle-lines": shuffleLines,
+
+    // エンコード
+    "base64-encode": base64Encode,
+    "base64-decode": base64Decode,
+    "url-encode": urlEncode,
+    "url-decode": urlDecode,
+    "html-encode": htmlEncode,
+    "html-decode": htmlDecode,
+
+    // 文字コード
+    "ascii": asciiCode,
+    "unicode-codepoint": unicodeCodePoint,
+    "unicode-escape": unicodeEscape,
+    "utf8-bytes": utf8Bytes
+};
+
+// ---------- ツール実行 ----------
+
+function runTool(toolId) {
+
+    const tool = tools[toolId];
+
+    if (!tool) {
+        return;
+    }
+
+    const input = getInput();
+    const result = tool(input);
+
+    setOutput(result);
+}
+
+// ---------- ボタン自動認識 ----------
+
+document.querySelectorAll("[data-tool]").forEach(button => {
 
     button.addEventListener("click", () => {
 
-        const name = button.textContent.trim();
-        const text = inputText.value;
+        const toolId = button.dataset.tool;
 
-        switch (name) {
+        runTool(toolId);
 
-            // 変換
-            case "ひらがな → カタカナ":
-                showResult(hiraganaToKatakana(text));
-                break;
-
-            case "カタカナ → ひらがな":
-                showResult(katakanaToHiragana(text));
-                break;
-
-            case "ひらがな → ローマ字":
-                showResult(hiraganaToRomaji(text));
-                break;
-
-            case "大文字 → 小文字":
-                showResult(toLowerCase(text));
-                break;
-
-            case "小文字 → 大文字":
-                showResult(toUpperCase(text));
-                break;
-
-            case "全角 → 半角":
-                showResult(fullWidthToHalfWidth(text));
-                break;
-
-            case "半角 → 全角":
-                showResult(halfWidthToFullWidth(text));
-                break;
-
-            case "文字列を逆順":
-                showResult(reverseText(text));
-                break;
-
-
-            // 加工
-            case "指定回数繰り返す":
-                repeatText();
-                break;
-
-            case "空白を削除":
-                removeSpaces();
-                break;
-
-            case "空行を削除":
-                removeEmptyLines();
-                break;
-
-            case "重複行を削除":
-                removeDuplicateLines();
-                break;
-
-            case "行を逆順":
-                reverseLines();
-                break;
-
-            case "行をシャッフル":
-                shuffleLines();
-                break;
-
-            default:
-                break;
-        }
     });
+
 });
 
-
-// ==============================
-// クリア
-// ==============================
+// ---------- クリア ----------
 
 clearButton.addEventListener("click", () => {
 
@@ -501,43 +294,52 @@ clearButton.addEventListener("click", () => {
     outputText.value = "";
 
     updateAnalysis();
+
 });
 
-
-// ==============================
-// コピー
-// ==============================
+// ---------- コピー ----------
 
 copyButton.addEventListener("click", async () => {
 
-    const text = outputText.value;
-
-    if (!text) {
+    if (outputText.value === "") {
         return;
     }
 
-    try {
+    await navigator.clipboard.writeText(outputText.value);
 
-        await navigator.clipboard.writeText(text);
-
-        const originalText = copyButton.textContent;
-
-        copyButton.textContent = "コピーしました";
-
-        setTimeout(() => {
-            copyButton.textContent = originalText;
-        }, 1200);
-
-    } catch (error) {
-
-        outputText.select();
-        document.execCommand("copy");
-    }
 });
 
+// ---------- タブ切り替え ----------
 
-// ==============================
-// 初期化
-// ==============================
+document.querySelectorAll(".tab").forEach(tab => {
 
+    tab.addEventListener("click", () => {
+
+        document.querySelectorAll(".tab").forEach(t =>
+            t.classList.remove("active")
+        );
+
+        document.querySelectorAll(".tab-content").forEach(content =>
+            content.classList.remove("active")
+        );
+
+        tab.classList.add("active");
+
+        const target = document.getElementById(
+            tab.dataset.tab
+        );
+
+        if (target) {
+            target.classList.add("active");
+        }
+
+    });
+
+});
+
+// ---------- 入力時に解析 ----------
+
+inputText.addEventListener("input", updateAnalysis);
+
+// 初期解析
 updateAnalysis();
