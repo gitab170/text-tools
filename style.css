@@ -1,3 +1,10 @@
+```css
+/* ========================================
+   Text Tools - Style
+   ======================================== */
+
+/* ---------- 基本設定 ---------- */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -21,6 +28,7 @@ body {
         "Segoe UI",
         "Noto Sans JP",
         sans-serif;
+
     background: var(--background);
     color: var(--text);
     min-height: 100vh;
@@ -35,36 +43,36 @@ button {
     cursor: pointer;
 }
 
+/* ---------- コンテナ ---------- */
+
 .container {
     width: min(1100px, calc(100% - 32px));
     margin: 0 auto;
 }
 
-/* ヘッダー */
+/* ---------- ヘッダー ---------- */
 
-.header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+header {
     padding: 32px 0;
     margin-bottom: 32px;
 }
 
-.header h1 {
+header h1 {
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -1px;
 }
 
-.header p {
+header p {
     margin-top: 6px;
     color: var(--subtext);
     font-size: 14px;
 }
 
-/* セクション */
+/* ---------- 入力・出力セクション ---------- */
 
-.editor,
-.output {
+.input-section,
+.output-section {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
@@ -72,29 +80,37 @@ button {
     margin-bottom: 24px;
 }
 
-.section-title {
+/* ---------- セクションヘッダー ---------- */
+
+.section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
 }
 
-.section-title h2,
-.tab-content h2 {
+.section-header h2 {
     font-size: 18px;
     font-weight: 650;
 }
+
+/* ---------- テキストエリア ---------- */
 
 textarea {
     width: 100%;
     min-height: 180px;
     resize: vertical;
+
     border: 1px solid var(--border);
     border-radius: 14px;
+
     background: #fafafa;
     color: var(--text);
+
     padding: 16px;
+
     outline: none;
+
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease;
@@ -102,21 +118,26 @@ textarea {
 
 textarea:focus {
     border-color: #999999;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+
+    box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 textarea::placeholder {
     color: #aaaaaa;
 }
 
-/* タブ */
+/* ---------- タブ ---------- */
 
 .tabs {
     display: flex;
     gap: 8px;
+
     overflow-x: auto;
+
     padding: 4px;
     margin-bottom: 24px;
+
     scrollbar-width: none;
 }
 
@@ -126,11 +147,16 @@ textarea::placeholder {
 
 .tab {
     flex: 0 0 auto;
+
     border: none;
     background: transparent;
+
     color: #666666;
+
     padding: 11px 18px;
+
     border-radius: 12px;
+
     transition:
         background 0.2s ease,
         color 0.2s ease,
@@ -151,19 +177,22 @@ textarea::placeholder {
     color: white;
 }
 
-/* タブの中身 */
+/* ---------- タブの中身 ---------- */
 
 .tab-content {
     display: none;
+
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
+
     padding: 24px;
     margin-bottom: 24px;
 }
 
 .tab-content.active {
     display: block;
+
     animation: fadeIn 0.2s ease;
 }
 
@@ -179,79 +208,97 @@ textarea::placeholder {
     }
 }
 
-/* ツールボタン */
+/* ---------- ツールボタン ---------- */
 
-.tools-grid {
+.tool-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
     gap: 12px;
-    margin-top: 18px;
 }
 
-.tool-button {
+.tool-grid button {
     min-height: 52px;
+
     border: 1px solid var(--border);
     background: #ffffff;
     color: var(--text);
+
     border-radius: 14px;
+
     padding: 12px 16px;
+
     text-align: left;
+
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
         transform 0.15s ease;
 }
 
-.tool-button:hover {
+.tool-grid button:hover {
     background: var(--hover);
     border-color: #cccccc;
 }
 
-.tool-button:active {
+.tool-grid button:active {
     transform: scale(0.97);
 }
 
-/* 小さいボタン */
+/* ---------- 小さいボタン ---------- */
 
-.section-title button {
+.secondary-button {
     border: none;
+
     background: var(--black);
     color: white;
+
     border-radius: 10px;
+
     padding: 8px 14px;
+
     transition:
         opacity 0.2s ease,
         transform 0.15s ease;
 }
 
-.section-title button:hover {
+.secondary-button:hover {
     opacity: 0.8;
 }
 
-.section-title button:active {
+.secondary-button:active {
     transform: scale(0.95);
 }
 
-/* 解析結果 */
+/* ---------- 解析 ---------- */
 
-.result-grid {
+.analysis-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(160px, 1fr));
+
     gap: 12px;
-    margin-top: 18px;
 }
 
 .result-card {
     background: #f7f7f7;
+
     border: 1px solid var(--border);
     border-radius: 16px;
+
     padding: 18px;
 }
 
 .result-card span {
     display: block;
+
     color: var(--subtext);
+
     font-size: 13px;
+
     margin-bottom: 8px;
 }
 
@@ -260,34 +307,53 @@ textarea::placeholder {
     font-weight: 650;
 }
 
-/* スマホ */
+/* ---------- ボタン共通 ---------- */
+
+button:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.15);
+    outline-offset: 2px;
+}
+
+/* ---------- スクロールバー ---------- */
+
+textarea {
+    scrollbar-width: thin;
+}
+
+/* ---------- スマートフォン ---------- */
 
 @media (max-width: 600px) {
+
     .container {
         width: min(100% - 20px, 1100px);
     }
 
-    .header {
+    header {
         padding: 24px 0;
         margin-bottom: 20px;
     }
 
-    .header h1 {
+    header h1 {
         font-size: 27px;
     }
 
-    .editor,
-    .output,
+    .input-section,
+    .output-section,
     .tab-content {
         border-radius: 16px;
         padding: 16px;
     }
 
-    .tools-grid {
+    .tool-grid {
         grid-template-columns: 1fr;
     }
 
     textarea {
         min-height: 150px;
     }
+
+    .tab {
+        padding: 10px 15px;
+    }
 }
+```
