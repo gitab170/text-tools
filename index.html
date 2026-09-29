@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>Text Tools</h1>
+            <p>テキスト変換・加工・解析ツール</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="editor">
+            <div class="section-title">
+                <h2>テキスト</h2>
+                <button id="clearButton">クリア</button>
+            </div>
+
+            <textarea id="inputText" placeholder="ここにテキストを入力してください"></textarea>
+        </section>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="convert">変換</button>
+            <button class="tab" data-tab="analyze">解析</button>
+            <button class="tab" data-tab="process">加工</button>
+            <button class="tab" data-tab="encode">エンコード</button>
+            <button class="tab" data-tab="character">文字コード</button>
+            <button class="tab" data-tab="other">その他</button>
+        </nav>
+
+        <section class="tab-content active" id="convert">
+            <h2>変換</h2>
+
+            <div class="tools-grid">
+                <button class="tool-button">ひらがな → カタカナ</button>
+                <button class="tool-button">カタカナ → ひらがな</button>
+                <button class="tool-button">ひらがな → ローマ字</button>
+                <button class="tool-button">大文字 → 小文字</button>
+                <button class="tool-button">小文字 → 大文字</button>
+                <button class="tool-button">全角 → 半角</button>
+                <button class="tool-button">半角 → 全角</button>
+                <button class="tool-button">文字列を逆順</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="analyze">
+            <h2>解析</h2>
+
+            <div class="result-grid">
+                <div class="result-card">
+                    <span>文字数</span>
+                    <strong id="charCount">0</strong>
+                </div>
+
+                <div class="result-card">
+                    <span>行数</span>
+                    <strong id="lineCount">0</strong>
+                </div>
+
+                <div class="result-card">
+                    <span>バイト数</span>
+                    <strong id="byteCount">0</strong>
+                </div>
+
+                <div class="result-card">
+                    <span>空白数</span>
+                    <strong id="spaceCount">0</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-content" id="process">
+            <h2>加工</h2>
+
+            <div class="tools-grid">
+                <button class="tool-button">指定回数繰り返す</button>
+                <button class="tool-button">文字列を分割</button>
+                <button class="tool-button">行を結合</button>
+                <button class="tool-button">空白を削除</button>
+                <button class="tool-button">空行を削除</button>
+                <button class="tool-button">重複行を削除</button>
+                <button class="tool-button">行を逆順</button>
+                <button class="tool-button">行をシャッフル</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="encode">
+            <h2>エンコード</h2>
+
+            <div class="tools-grid">
+                <button class="tool-button">Base64 エンコード</button>
+                <button class="tool-button">Base64 デコード</button>
+                <button class="tool-button">URL エンコード</button>
+                <button class="tool-button">URL デコード</button>
+                <button class="tool-button">HTML エンコード</button>
+                <button class="tool-button">HTML デコード</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="character">
+            <h2>文字コード</h2>
+
+            <div class="tools-grid">
+                <button class="tool-button">ASCII コード</button>
+                <button class="tool-button">Unicode コードポイント</button>
+                <button class="tool-button">Unicode エスケープ</button>
+                <button class="tool-button">UTF-8 バイト列</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="other">
+            <h2>その他</h2>
+
+            <div class="tools-grid">
+                <button class="tool-button">コピー</button>
+                <button class="tool-button">結果をダウンロード</button>
+            </div>
+        </section>
+
+        <section class="output">
+            <div class="section-title">
+                <h2>結果</h2>
+                <button id="copyButton">コピー</button>
+            </div>
+
+            <textarea id="outputText" readonly placeholder="ここに変換結果が表示されます"></textarea>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
