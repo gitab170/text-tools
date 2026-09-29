@@ -1,60 +1,124 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Text Tools</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header class="header">
-        <div class="container">
+    <div class="container">
+
+        <!-- ヘッダー -->
+        <header>
             <h1>Text Tools</h1>
             <p>テキスト変換・加工・解析ツール</p>
-        </div>
-    </header>
+        </header>
 
-    <main class="container">
 
-        <section class="editor">
-            <div class="section-title">
-                <h2>テキスト</h2>
-                <button id="clearButton">クリア</button>
+        <!-- 入力 -->
+        <section class="input-section">
+
+            <div class="section-header">
+                <h2>入力</h2>
+
+                <button id="clearButton" class="secondary-button">
+                    クリア
+                </button>
             </div>
 
-            <textarea id="inputText" placeholder="ここにテキストを入力してください"></textarea>
+            <textarea
+                id="inputText"
+                placeholder="ここにテキストを入力してください..."
+            ></textarea>
+
         </section>
 
+
+        <!-- タブ -->
         <nav class="tabs">
-            <button class="tab active" data-tab="convert">変換</button>
-            <button class="tab" data-tab="analyze">解析</button>
-            <button class="tab" data-tab="process">加工</button>
-            <button class="tab" data-tab="encode">エンコード</button>
-            <button class="tab" data-tab="character">文字コード</button>
-            <button class="tab" data-tab="other">その他</button>
+
+            <button class="tab active" data-tab="convert">
+                変換
+            </button>
+
+            <button class="tab" data-tab="analyze">
+                解析
+            </button>
+
+            <button class="tab" data-tab="process">
+                加工
+            </button>
+
+            <button class="tab" data-tab="encode">
+                エンコード
+            </button>
+
+            <button class="tab" data-tab="character">
+                文字コード
+            </button>
+
+            <button class="tab" data-tab="other">
+                その他
+            </button>
+
         </nav>
 
-        <section class="tab-content active" id="convert">
-            <h2>変換</h2>
 
-            <div class="tools-grid">
-                <button class="tool-button">ひらがな → カタカナ</button>
-                <button class="tool-button">カタカナ → ひらがな</button>
-                <button class="tool-button">ひらがな → ローマ字</button>
-                <button class="tool-button">大文字 → 小文字</button>
-                <button class="tool-button">小文字 → 大文字</button>
-                <button class="tool-button">全角 → 半角</button>
-                <button class="tool-button">半角 → 全角</button>
-                <button class="tool-button">文字列を逆順</button>
+        <!-- ========================= -->
+        <!-- 変換 -->
+        <!-- ========================= -->
+
+        <section id="convert" class="tab-content active">
+
+            <div class="tool-grid">
+
+                <button data-tool="hiragana-katakana">
+                    ひらがな → カタカナ
+                </button>
+
+                <button data-tool="katakana-hiragana">
+                    カタカナ → ひらがな
+                </button>
+
+                <button data-tool="lowercase">
+                    大文字 → 小文字
+                </button>
+
+                <button data-tool="uppercase">
+                    小文字 → 大文字
+                </button>
+
+                <button data-tool="full-half">
+                    全角 → 半角
+                </button>
+
+                <button data-tool="half-full">
+                    半角 → 全角
+                </button>
+
+                <button data-tool="reverse">
+                    文字列を逆順
+                </button>
+
             </div>
+
         </section>
 
-        <section class="tab-content" id="analyze">
-            <h2>解析</h2>
 
-            <div class="result-grid">
+        <!-- ========================= -->
+        <!-- 解析 -->
+        <!-- ========================= -->
+
+        <section id="analyze" class="tab-content">
+
+            <div class="analysis-grid">
+
                 <div class="result-card">
                     <span>文字数</span>
                     <strong id="charCount">0</strong>
@@ -66,76 +130,165 @@
                 </div>
 
                 <div class="result-card">
-                    <span>バイト数</span>
+                    <span>UTF-8バイト数</span>
                     <strong id="byteCount">0</strong>
                 </div>
 
                 <div class="result-card">
-                    <span>空白数</span>
+                    <span>空白文字数</span>
                     <strong id="spaceCount">0</strong>
                 </div>
-            </div>
-        </section>
 
-        <section class="tab-content" id="process">
-            <h2>加工</h2>
-
-            <div class="tools-grid">
-                <button class="tool-button">指定回数繰り返す</button>
-                <button class="tool-button">文字列を分割</button>
-                <button class="tool-button">行を結合</button>
-                <button class="tool-button">空白を削除</button>
-                <button class="tool-button">空行を削除</button>
-                <button class="tool-button">重複行を削除</button>
-                <button class="tool-button">行を逆順</button>
-                <button class="tool-button">行をシャッフル</button>
-            </div>
-        </section>
-
-        <section class="tab-content" id="encode">
-            <h2>エンコード</h2>
-
-            <div class="tools-grid">
-                <button class="tool-button">Base64 エンコード</button>
-                <button class="tool-button">Base64 デコード</button>
-                <button class="tool-button">URL エンコード</button>
-                <button class="tool-button">URL デコード</button>
-                <button class="tool-button">HTML エンコード</button>
-                <button class="tool-button">HTML デコード</button>
-            </div>
-        </section>
-
-        <section class="tab-content" id="character">
-            <h2>文字コード</h2>
-
-            <div class="tools-grid">
-                <button class="tool-button">ASCII コード</button>
-                <button class="tool-button">Unicode コードポイント</button>
-                <button class="tool-button">Unicode エスケープ</button>
-                <button class="tool-button">UTF-8 バイト列</button>
-            </div>
-        </section>
-
-        <section class="tab-content" id="other">
-            <h2>その他</h2>
-
-            <div class="tools-grid">
-                <button class="tool-button">コピー</button>
-                <button class="tool-button">結果をダウンロード</button>
-            </div>
-        </section>
-
-        <section class="output">
-            <div class="section-title">
-                <h2>結果</h2>
-                <button id="copyButton">コピー</button>
             </div>
 
-            <textarea id="outputText" readonly placeholder="ここに変換結果が表示されます"></textarea>
         </section>
 
-    </main>
+
+        <!-- ========================= -->
+        <!-- 加工 -->
+        <!-- ========================= -->
+
+        <section id="process" class="tab-content">
+
+            <div class="tool-grid">
+
+                <button data-tool="remove-spaces">
+                    空白を削除
+                </button>
+
+                <button data-tool="remove-empty-lines">
+                    空行を削除
+                </button>
+
+                <button data-tool="remove-duplicate-lines">
+                    重複行を削除
+                </button>
+
+                <button data-tool="reverse-lines">
+                    行を逆順
+                </button>
+
+                <button data-tool="shuffle-lines">
+                    行をシャッフル
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- エンコード -->
+        <!-- ========================= -->
+
+        <section id="encode" class="tab-content">
+
+            <div class="tool-grid">
+
+                <button data-tool="base64-encode">
+                    Base64 エンコード
+                </button>
+
+                <button data-tool="base64-decode">
+                    Base64 デコード
+                </button>
+
+                <button data-tool="url-encode">
+                    URL エンコード
+                </button>
+
+                <button data-tool="url-decode">
+                    URL デコード
+                </button>
+
+                <button data-tool="html-encode">
+                    HTML エンコード
+                </button>
+
+                <button data-tool="html-decode">
+                    HTML デコード
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- 文字コード -->
+        <!-- ========================= -->
+
+        <section id="character" class="tab-content">
+
+            <div class="tool-grid">
+
+                <button data-tool="ascii">
+                    ASCII コード
+                </button>
+
+                <button data-tool="unicode-codepoint">
+                    Unicode コードポイント
+                </button>
+
+                <button data-tool="unicode-escape">
+                    Unicode エスケープ
+                </button>
+
+                <button data-tool="utf8-bytes">
+                    UTF-8 バイト列
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- その他 -->
+        <!-- ========================= -->
+
+        <section id="other" class="tab-content">
+
+            <div class="tool-grid">
+
+                <button id="copyButton">
+                    結果をコピー
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- 出力 -->
+        <!-- ========================= -->
+
+        <section class="output-section">
+
+            <div class="section-header">
+
+                <h2>出力</h2>
+
+                <button id="copyButton" class="secondary-button">
+                    コピー
+                </button>
+
+            </div>
+
+            <textarea
+                id="outputText"
+                readonly
+                placeholder="ここに結果が表示されます..."
+            ></textarea>
+
+        </section>
+
+    </div>
+
 
     <script src="script.js"></script>
+
 </body>
+
 </html>
